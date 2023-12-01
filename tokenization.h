@@ -35,8 +35,11 @@ void tokenize_input(char ***tokens, int* n, char* file, char* delimiters){
                 tokens = &temp;
             }
 
-
-            (*tokens)[i] = (char*) malloc((strlen(token)+1) * sizeof(char));
+            char* temp = (char*) malloc((strlen(token)+1) * sizeof(char));
+            if (temp == NULL){
+                printf("Error in allocation");
+            }   
+            (*tokens)[i] = temp;
             strcpy((*tokens)[i], token);
             token = strtok(NULL, delimiter_characters);
             i++;
