@@ -5,6 +5,7 @@
 #include <errno.h>
 #include <ctype.h> 
 #include "tokenization.h"
+#include "utilities.h"
 
 
 char wordToNumber(char* word){
@@ -21,20 +22,6 @@ char wordToNumber(char* word){
     return -1;
 }
 
-char wordToNumberRev(char* word){
-    if (strstr(word, "orez") != NULL) return '0';
-    if (strstr(word, "eno") != NULL) return '1';
-    if (strstr(word, "owt") != NULL) return '2';
-    if (strstr(word, "eerht") != NULL) return '3';
-    if (strstr(word, "ruof") != NULL) return '4';
-    if (strstr(word, "evif") != NULL) return '5';
-    if (strstr(word, "xis") != NULL) return '6';
-    if (strstr(word, "neves")!= NULL) return '7';
-    if (strstr(word, "thgie")!= NULL) return '8';
-    if (strstr(word, "enin")!= NULL) return '9';
-    return -1;
-}
-
 void part1(char **tokens, int n){
      int sum = 0;
 
@@ -42,7 +29,7 @@ void part1(char **tokens, int n){
         char* str = tokens[i];
         int l = strlen(str);
 
-        char num[32];
+        char num[3];
 
         int d1 = 0;
         int d2 = 0;
@@ -57,11 +44,9 @@ void part1(char **tokens, int n){
                 num[1] = str[l-1-j];
                 d2 = 1;
             }
-        }
+        }     
 
-        int val;
-     
-        sum += atoi(num);
+        sum += strtol(num, NULL, 10);
     }
 
     printf("Part 1: %d\n", sum);
@@ -92,8 +77,9 @@ void part2(char **tokens, int n){
                 d1 = 1;
             }
 
-            if (!d1 && wordToNumber(prefix) != -1){
-                num[0] = wordToNumber(prefix);
+            int curr1 = wordToNumber(prefix);
+            if (!d1 && curr1 != -1){
+                num[0] = curr1;
                 d1 = 1;
             }
 
@@ -101,14 +87,15 @@ void part2(char **tokens, int n){
                 num[1] = str[l-1-j];
                 d2 = 1;
             }
-
-            if (!d2 && wordToNumberRev(suffix) != -1){
-                num[1] = wordToNumberRev(suffix);
+            
+            int curr2 = wordToNumber(strrev(suffix));
+            if (!d2 && curr2 != -1){
+                num[1] = curr2;
                 d2 = 1;
             }
         }
 
-        sum+= atoi(num);
+        sum += strtol(num, NULL, 10);
 
     }
 
