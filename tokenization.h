@@ -31,6 +31,7 @@ void tokenize_input(char ***tokens, int* n, char* file, char* delimiters){
                 char** temp = (char**) realloc(*tokens, (size+1) * sizeof(char*));
                 if (temp == NULL){
                     printf("Error in allocation");
+                    return;
                 }
                 tokens = &temp;
             }
@@ -38,6 +39,7 @@ void tokenize_input(char ***tokens, int* n, char* file, char* delimiters){
             char* temp = (char*) malloc((strlen(token)+1) * sizeof(char));
             if (temp == NULL){
                 printf("Error in allocation");
+                return;
             }   
             (*tokens)[i] = temp;
             strcpy((*tokens)[i], token);
