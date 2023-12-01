@@ -4,58 +4,8 @@
 #include <string.h>
 #include <errno.h>
 #include <ctype.h> 
+#include "tokenization.h"
 
-#define BUFFER_SIZE 1024
-#define INPUT_SIZE 1024
-
-void tokenize_input(char ***tokens, int* n, char* file, char* delimiters){
-
-    int size = INPUT_SIZE+1;
-
-    char buffer[BUFFER_SIZE];
-    const char *delimiter_characters = delimiters;
-
-    FILE *fp = fopen(file, "r");
-    if (!fp){
-        fprintf(stderr, "cannot open %s: %s\n", "test.txt", strerror(errno));
-    }
-
-    char *token;
-
-    int i = 0;
-    while (fgets(buffer, BUFFER_SIZE, fp)) {
-        token = strtok(buffer, delimiter_characters);
-
-        while (token != NULL){ 
-
-            if (i >= size){ // dynamically change size of array
-                size *= 2;
-                char** temp = (char**) realloc(*tokens, (size+1) * sizeof(char*));
-                if (temp == NULL){
-                    printf("Error in allocation");
-                }
-                tokens = &temp;
-            }
-
-
-            (*tokens)[i] = (char*) malloc((strlen(token)+1) * sizeof(char));
-            strcpy((*tokens)[i], token);
-            token = strtok(NULL, delimiter_characters);
-            i++;
-        }            
-    }
-
-    *n = i;
-    
-    fclose(fp);
-}
-
-void free_tokens(char** tokens, int n){
-    for (int i = 0; i < n; i++){
-        free(tokens[i]);
-    }
-    free(tokens);
-}
 
 char wordToNumber(char* word){
     if (strstr(word, "zero")) return '0';
