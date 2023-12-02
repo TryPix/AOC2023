@@ -1,4 +1,6 @@
-*.txt
+inputs
 tempCodeRunnerFile.c
 utilities
 day1
+day2
+day3
