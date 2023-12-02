@@ -40,14 +40,13 @@ int main() {
     int k = 101;
 
     int arr[k][3];
-    int gameIndex = 0;
+    memset(arr, 0, k*3*sizeof(int));
+
+    int gameIndex = 0; // 1 indexing
 
     for (int i = 0; i < n; i++){
         if (strstr(tokens[i], "Game") != NULL){
             gameIndex++;
-            arr[gameIndex][0] = 0;
-            arr[gameIndex][1] = 0;
-            arr[gameIndex][2] = 0;
             continue;
         }
 
