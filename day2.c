@@ -34,7 +34,7 @@ int main() {
     char **tokens = (char**) malloc((INPUT_SIZE+1) * sizeof(char*));
     int n;
 
-    tokenize_input(&tokens, &n, "day2.txt", ":;");
+    tokenize_input(&tokens, &n, "inputs/day2.txt", ":;");
 
     int sum = 0;
     int k = 101;
