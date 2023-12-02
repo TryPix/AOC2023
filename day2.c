@@ -1,10 +1,7 @@
 #include <stdio.h>
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h> 
 #include "utilities.h"
-#include <errno.h>
 #include "tokenization.h"
 
 int getcolor(char* str){
@@ -60,7 +57,6 @@ int main() {
             int val = strtol(color, NULL, 10);
             arr[gameIndex][j] = max(arr[gameIndex][j], val);
             color = strtok(NULL, ",");
-
         }
     }
 
