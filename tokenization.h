@@ -10,6 +10,8 @@ void tokenize_input(char ***tokens, int* n, char* file, char* delimiters){
 
     int size = INPUT_SIZE+1;
 
+    *tokens = (char**) malloc((INPUT_SIZE+1) * sizeof(char*));
+
     char buffer[BUFFER_SIZE];
     const char *delimiter_characters = delimiters;
 
