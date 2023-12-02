@@ -107,7 +107,7 @@ int main() {
     char **tokens = (char**) malloc((INPUT_SIZE+1) * sizeof(char*));
     int n;
 
-    tokenize_input(&tokens, &n, "day1.txt", "\n ");
+    tokenize_input(&tokens, &n, "inputs/day1.txt", "\n ");
 
     part1(tokens, n);
     part2(tokens, n);
