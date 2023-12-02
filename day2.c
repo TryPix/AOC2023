@@ -31,7 +31,7 @@ void part2(int arr[101][3]){
 
 int main() {
 
-    char **tokens = (char**) malloc((INPUT_SIZE+1) * sizeof(char*));
+    char **tokens;
     int n;
 
     tokenize_input(&tokens, &n, "inputs/day2.txt", ":;");
