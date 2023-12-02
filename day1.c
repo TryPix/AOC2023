@@ -1,8 +1,7 @@
 #include <stdio.h>
-#include <math.h>
 #include <stdlib.h>
+#include <math.h>
 #include <string.h>
-#include <errno.h>
 #include <ctype.h> 
 #include "tokenization.h"
 #include "utilities.h"
