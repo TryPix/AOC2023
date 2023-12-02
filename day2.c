@@ -37,10 +37,8 @@ int main() {
     tokenize_input(&tokens, &n, "inputs/day2.txt", ":;");
 
     int sum = 0;
-    int k = 101;
 
-    int arr[k][3];
-    memset(arr, 0, k*3*sizeof(int));
+    int arr[101][3] ={{0}};
 
     int gameIndex = 0; // 1 indexing
 
