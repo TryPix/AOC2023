@@ -29,29 +29,24 @@ int main() {
     for (int i = 0; i < n; i++){
         char* str = tokens[i];
     
-        for (int j = 0; j < l+1; j++){
+        for (int j = 0; j < l+1; j++){ // l+1 access to next row for edge case of number at the end of the line
             if (j < l+1) gears[i][j] = -str[j];
+
             if (start == -1 && isdigit(str[j])) {start = j;}
+
             else if (start != -1 && !isdigit(str[j])){
                 end = j;
 
-                char num[32];
-                for (int k = 0; k < 32; k++){
-                    num[k] = ' ';
-                }
+                char num[4];
+                memset(num, 0, sizeof(num));
 
-                for (int k = 0; k < end-start; k++){
-                    num[k] = str[start+k];
-                }
+                for (int k = 0; k < end-start; k++) num[k] = str[start+k];
 
                 int val = strtol(num, NULL, 10);
 
-                for (int k = start; k < end; k++){
-                    gears[i][k] = val;
-                }
+                for (int k = start; k < end; k++) gears[i][k] = val;
 
-                start = -1;
-                end = -1;
+                start = -1; end = -1;
             }
         }
     }
@@ -60,8 +55,9 @@ int main() {
     int i = 0;
     int j = 0;
     int last = 0;
-    int dr[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
-    int dc[8] = {-1,  0,  1,-1, 1,-1, 0, 1};
+    int dr[8] = {0, 0, -1, -1, -1, 1, 1, 1};
+    int dc[8] = {-1, 1, 0, -1,  1, 0,-1 ,1};
+    int check[8] = {1,1,1,1,1,1,1,1};
 
     while (i < n){
         
@@ -92,7 +88,7 @@ int main() {
     i = 0;
     j = 0;
     last = 0;
-    long sum3 = 0;
+    int sum2 = 0;
     int nums[6] = {0};
 
     while (i < n){
@@ -101,50 +97,25 @@ int main() {
             int k = 0;
             if (-gears[i][j] == '*'){
 
-
-
-                if (gears[i][min(j+1, l-1)] > 0) nums[k++] = gears[i][min(j+1, l-1)];
-                if (gears[i][max(j-1, 0)] > 0) nums[k++] = gears[i][max(j-1, 0)];
-                if (gears[max(i-1, 0)][j] > 0) nums[k++] = gears[max(i-1, 0)][j];
-                
-                else if (gears[max(i-1, 0)][min(j+1, l-1)] > 0){
-                    nums[k++] = gears[max(i-1, 0)][min(j+1, l-1)];
-                    
-                    if (gears[max(i-1, 0)][max(j-1, 0)] > 0){
-                        nums[k++] = gears[max(i-1, 0)][max(j-1, 0)];
-                    }
-                }
-                else if (gears[max(i-1, 0)][max(j-1, 0)] > 0){
-                    nums[k++] = gears[max(i-1, 0)][max(j-1, 0)];
-                    if (gears[max(i-1, 0)][min(j+1, l-1)] > 0){
-                        nums[k++] = gears[max(i-1, 0)][min(j+1, l-1)];
-                    }
-                }
-
-                if (gears[min(i+1, n-1)][j] > 0) nums[k++] = gears[min(i+1, n-1)][j];
-                
-                else if (gears[min(i+1, n-1)][max(j-1, 0)] > 0) {
-                    nums[k++] = gears[min(i+1, n-1)][max(j-1, 0)];
-                    if (gears[min(i+1, n-1)][min(j+1, l-1)] > 0){
-                        nums[k++] = gears[min(i+1, n-1)][min(j+1, l-1)];
-                    }
-                } 
-                else if (gears[min(i+1, n-1)][min(j+1, l-1)] > 0){
-                    nums[k++] = gears[min(i+1, n-1)][min(j+1, l-1)];
-                    if (gears[min(i+1, n-1)][max(j-1, 0)] > 0){
-                        nums[k++] = gears[min(i+1, n-1)][max(j-1, 0)];
+                for (int t = 0; t < 8; t++){
+                    if (check[t] == 0) continue;
+                    int row = i + dr[t];
+                    int col = j + dc[t];
+                    if (row < n && col < l && gears[row][col] > 0){
+                        nums[k++] = gears[row][col];
+                        if (t == 2 || t == 5){
+                            check[t+1] = 0;
+                            check[t+2] = 0;
+                        }
                     }
                 }
                 
                 if (nums[2] == 0){
-                    sum3 += nums[0] * nums[1];
+                    sum2 += nums[0] * nums[1];
                 }
 
-                for (int t = 0; t < 6; t++){
-                    nums[t] = 0;
-                }
-                // vals[0] = 0;
-                // vals[1] = 0;
+                memset(nums, 0, sizeof(nums));
+                memset(check, 1, sizeof(check));
 
             }
             j++;
@@ -156,7 +127,7 @@ int main() {
 
 
 
-    printf("sum: %d \n", sum3);
+    printf("sum: %d \n", sum2);
 
 
     free_tokens(tokens, n);
