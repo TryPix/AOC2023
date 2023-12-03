@@ -6,35 +6,24 @@
 #include "tokenization.h"
 #include "utilities.h"
 
-
-int main() {
-
-    char **tokens;
-    int n;
-
-    tokenize_input(&tokens, &n, "inputs/day3.txt", "\n");
-    int l = strlen(tokens[0]);
+void parsetogrid(int n, int l, int gears[n][l], char*** tokens){
 
     int start = -1;
     int end = -1;
-
-    int sum = 0;
-
-    int gears[n][l];
-    memset(gears, 0, sizeof(gears));
-
-    int index = 0;
-
+    
 
     for (int i = 0; i < n; i++){
-        char* str = tokens[i];
+        char str[l+1];
+        strcpy(str, (*tokens)[i]);
+        str[l] = '.';
     
-        for (int j = 0; j < l+1; j++){ // l+1 access to next row for edge case of number at the end of the line
+        for (int j = 0; j < l+1; j++){ // l+1 for edge case of number at the end of the line
             if (j < l+1) gears[i][j] = -str[j];
 
             if (start == -1 && isdigit(str[j])) {start = j;}
 
             else if (start != -1 && !isdigit(str[j])){
+
                 end = j;
 
                 char num[4];
@@ -51,13 +40,14 @@ int main() {
         }
     }
 
+}
 
+void part1(int dr[8], int dc[8], int n, int l, int gears[n][l]){
+
+    int sum = 0;
     int i = 0;
     int j = 0;
     int last = 0;
-    int dr[8] = {0, 0, -1, -1, -1, 1, 1, 1};
-    int dc[8] = {-1, 1, 0, -1,  1, 0,-1 ,1};
-    int check[8] = {1,1,1,1,1,1,1,1};
 
     while (i < n){
         
@@ -84,12 +74,15 @@ int main() {
 
     printf("sum: %d \n", sum);
 
-    
-    i = 0;
-    j = 0;
-    last = 0;
-    int sum2 = 0;
+}
+
+void part2(int dr[8], int dc[8], int n, int l, int gears[n][l]){
+    int i = 0;
+    int j = 0;
+    int sum = 0;
     int nums[6] = {0};
+    int last = 0;
+    int check[8]; memset(check, 1, sizeof(check));
 
     while (i < n){
         
@@ -111,7 +104,7 @@ int main() {
                 }
                 
                 if (nums[2] == 0){
-                    sum2 += nums[0] * nums[1];
+                    sum += nums[0] * nums[1];
                 }
 
                 memset(nums, 0, sizeof(nums));
@@ -125,11 +118,37 @@ int main() {
         i++;
     }
 
+    printf("sum: %d \n", sum);
 
 
-    printf("sum: %d \n", sum2);
 
 
+}
+
+int main() {
+
+    char **tokens;
+    int n;
+
+    tokenize_input(&tokens, &n, "inputs/day3.txt", "\n");
+    int l = strlen(tokens[0]);
+
+    
+
+    int sum = 0;
+
+    int gears[n][l];
+    memset(gears, 0, sizeof(gears));
+
+    parsetogrid(n, l, gears, &tokens);
+
+
+    int dr[8] = {0, 0, -1, -1, -1, 1, 1, 1}; // order not arbitrary for part 2
+    int dc[8] = {-1, 1, 0, -1,  1, 0,-1 ,1};
+
+    part1(dr,dc,n,l,gears);
+    part2(dr,dc,n,l,gears);
+    
     free_tokens(tokens, n);
 
     return 0;
