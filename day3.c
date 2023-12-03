@@ -133,22 +133,17 @@ int main() {
     tokenize_input(&tokens, &n, "inputs/day3.txt", "\n");
     int l = strlen(tokens[0]);
 
-    
-
-    int sum = 0;
-
     int gears[n][l];
     memset(gears, 0, sizeof(gears));
 
     parsetogrid(n, l, gears, &tokens);
-
 
     int dr[8] = {0, 0, -1, -1, -1, 1, 1, 1}; // order not arbitrary for part 2
     int dc[8] = {-1, 1, 0, -1,  1, 0,-1 ,1};
 
     part1(dr,dc,n,l,gears);
     part2(dr,dc,n,l,gears);
-    
+
     free_tokens(tokens, n);
 
     return 0;
