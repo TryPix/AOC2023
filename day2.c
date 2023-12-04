@@ -38,7 +38,7 @@ int main() {
 
     int sum = 0;
 
-    int arr[101][3] ={{0}};
+    int arr[101][3] = {{0}};
 
     int gameIndex = 0; // 1 indexing
 
