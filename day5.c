@@ -7,20 +7,19 @@
 #include "tokenization.h"
 #include "utilities.h"
 
-long long applytransform(long long seed, long long size, long long transform[size][3]){
-    for (long long i = 0; i < size; i++){
-        long long dest_r = transform[i][0];
-        long long source_r = transform[i][1];
-        long long length = transform[i][2];
-        // prlong longf("%d %d %d\n", dest_r, source_r, length);
+long applytransform(long seed, long size, long transform[size][3]){
+    for (long i = 0; i < size; i++){
+        long dest_r = transform[i][0];
+        long source_r = transform[i][1];
+        long length = transform[i][2];
         if (seed >= source_r && seed <= source_r+length-1){
-            long long diff = dest_r-source_r;
+            long diff = dest_r-source_r;
             return seed + diff;
         }
     }
     return seed;
-
 }
+
 
 int main() {
 
@@ -29,30 +28,27 @@ int main() {
 
     tokenize_input(&tokens, &n, "inputs/day5.txt", "\n ");
 
-    long long seeds[32];
+    long seeds[32];
     memset(seeds, 0, 32);
-    long long s = 0;
 
-    long long transforms[7][64][3];
+    long transforms[7][64][3];
     memset(transforms, 0, sizeof(transforms));
-    long long t_index = 0;
 
-    long long index = 1;
+    long index = 1;
     while (isdigit(tokens[index][0])){
         seeds[index-1] = strtol(tokens[index], NULL, 10);
         index++;
     }
-    long long nseeds = index-1;
+    long nseeds = index-1;
 
-    long long transform_index = 0;
-    long long curr_index = 0;
+    long transform_index = 0;
+    long curr_index = 0;
 
-    long long sizes[7];
+    long sizes[7];
     memset(sizes, 0, 7);
-    long long rot = 0;
+    long rot = 0;
 
-    for (long long i = index+2; i < n; i++){
-        // prlong longf("%s ", tokens[i]);
+    for (long i = index+2; i < n; i++){
         if (!isdigit(tokens[i][0])){
             sizes[transform_index] = curr_index;
             transform_index++;
@@ -69,25 +65,15 @@ int main() {
         }
     }
 
+    free_tokens(tokens, n);
+
     sizes[6] = curr_index;
 
-    // prlong longf("\n\n");
-    // for (long long i = 0; i < 7; i++){
-    //     prlong longf("size: %d\n", sizes[i]);
-    //     for (long long j = 0; j < sizes[i]; j++){
-    //         for (long long k = 0; k < 3; k++){
-    //             prlong longf("%d ", transforms[i][j][k]);
-    //         }
-    //         prlong longf("\n");
-    //     }
-    //     prlong longf("\n");
-    // }
+    long best = LONG_MAX;
 
-    long long best = LONG_MAX;
-
-    for (long long seed = 0; seed < nseeds; seed++){
-        long long val = seeds[seed];
-        for (long long i = 0; i < 7; i++){
+    for (long seed = 0; seed < nseeds; seed++){
+        long val = seeds[seed];
+        for (long i = 0; i < 7; i++){
             val = applytransform(val, sizes[i], transforms[i]);
         }
         if (val < best){
@@ -95,15 +81,16 @@ int main() {
         }
     }
 
+    printf("Part 1: %ld\n", best);
+
     best = LONG_MAX;
 
-    for (long long i = 0; i < nseeds; i += 2){
-        long long start = seeds[i];
-        long long length = seeds[i+1];
-        for (long long seed = start; seed < start + length-1; seed++){
-            // printf("%d %d\n", length, val);
-            long long val = seed;
-            for (long long i = 0; i < 7; i++){
+    for (long i = 0; i < nseeds; i += 2){
+        long start = seeds[i];
+        long length = seeds[i+1];
+        for (long seed = start; seed < start + length-1; seed++){
+            long val = seed;
+            for (long i = 0; i < 7; i++){
                 val = applytransform(val, sizes[i], transforms[i]);
             }
             if (val < best){
@@ -112,15 +99,8 @@ int main() {
         }
 
     }
-
-    // prlong longf("%d %d", seeds[2], applytransform(seeds[2], sizes[0], transforms[0]));
-    printf("%lld", best);
+    printf("Part 2: %ld\n", best);
     
-
-
-
-
-    free_tokens(tokens, n);
 
     return 0;
 }
