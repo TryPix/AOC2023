@@ -6,6 +6,7 @@
 #include "tokenization.h"
 #include "utilities.h"
 
+
 int main() {
 
     char **tokens;
@@ -16,18 +17,25 @@ int main() {
     int times[5];
     int dists[5];
 
-    long long time =  49979494;
-    long long dist = 263153213781851;
-    long w = 0;
-
     for (int i = 1; i  < 5; i++){
         times[i-1] = strtol(tokens[i], NULL, 10);
         dists[i-1] = strtol(tokens[i+5], NULL, 10);
     }
 
-    for (int i = 1; i < 5; i++){
+    char t[32];
+    char d[64];
 
+    long time;
+    long dist;
+    long w = 0;
+
+    for (int i = 1; i < 5; i++){
+        strcat(t, tokens[i]);
+        strcat(d, tokens[i+5]);
     }
+    time = strtol(t, NULL, 10);
+    dist = strtol(d, NULL, 10);
+
 
     long sum = 1;
 
@@ -35,15 +43,13 @@ int main() {
         long ways = 0;
         int max = times[i]-1;
         int dist = dists[i];
-        for (int j = 1; j < max; j++){
+        for (int j = 1; j < times[i]-1; j++){
             long distance = j * (times[i]- j);  
             if (distance > dist){
                 ways++;
             }
         }
-        if (ways!=0){
-            sum *= ways;
-        }
+        sum *= ways;
         
     }
 
