@@ -26,7 +26,6 @@ int main() {
 
     for (int i = 0; i < 4; i++){
         long ways = 0;
-        int max = times[i]-1;
         int dist = dists[i];
         for (int j = 1; j < times[i]-1; j++){
             long distance = j * (times[i]- j);  
