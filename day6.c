@@ -22,21 +22,6 @@ int main() {
         dists[i-1] = strtol(tokens[i+5], NULL, 10);
     }
 
-    char t[32];
-    char d[64];
-
-    long time;
-    long dist;
-    long w = 0;
-
-    for (int i = 1; i < 5; i++){
-        strcat(t, tokens[i]);
-        strcat(d, tokens[i+5]);
-    }
-    time = strtol(t, NULL, 10);
-    dist = strtol(d, NULL, 10);
-
-
     long sum = 1;
 
     for (int i = 0; i < 4; i++){
@@ -52,6 +37,20 @@ int main() {
         sum *= ways;
         
     }
+
+    char t[32];
+    char d[64];
+
+    long time;
+    long dist;
+    long w = 0;
+
+    for (int i = 1; i < 5; i++){
+        strcat(t, tokens[i]);
+        strcat(d, tokens[i+5]);
+    }
+    time = strtol(t, NULL, 10);
+    dist = strtol(d, NULL, 10);
 
     for (int i = 1; i < time-1; i++){
         if (i * (time - i) > dist) w++;
