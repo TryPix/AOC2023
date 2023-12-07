@@ -162,8 +162,6 @@ void modhands(int n, Hand hands[n]){
     for (int i = 0; i < n; i++) findhand(&hands[i], 1);
 }
 
-
-
 int main() {
 
     char **tokens;
