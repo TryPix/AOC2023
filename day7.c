@@ -7,6 +7,8 @@
 #include "tokenization.h"
 #include "utilities.h"
 
+#define JOKER_INDEX 3
+
 char CARDS[13] = {'A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'};
 
 typedef struct {
@@ -42,14 +44,14 @@ int hasksame(Hand* hand, int k, int part2){
         int mmax = INT_MIN;
 
         for (int i = 0; i < 13; i++){
-            if (i == 3) continue;
+            if (i == JOKER_INDEX) continue;
             if (ncards[i] > mmax){
                 mmax = ncards[i];
                 maxIndex = i;
             }
         }
-        ncards[maxIndex] = ncards[maxIndex] + ncards[3];
-        ncards[3] = 0;
+        ncards[maxIndex] = ncards[maxIndex] + ncards[JOKER_INDEX];
+        ncards[JOKER_INDEX] = 0;
     }
 
     for (int i = 0; i < 13; i++){
@@ -58,7 +60,6 @@ int hasksame(Hand* hand, int k, int part2){
 
     return 0;
 }
-
 
 int istwopair(Hand* h){
     int ncards[13];
@@ -136,6 +137,31 @@ int comparehands2(const void* v1, const void* v2){
     return 0;
 }
 
+void parse(char*** tokens, int n, Hand hands[n], int part){
+    for (int i = 0; i < n; i++){
+        Hand h;
+        char* token;
+        token = strtok((*tokens)[i], " "); 
+        h.hand = token;
+        token = strtok(NULL, " "); 
+        h.bid = strtol(token, NULL, 10);
+        findhand(&h, 0);
+        hands[i] = h;
+    }
+}
+
+long winnings(int n, Hand hands[n]){
+    long count = 0;
+     for (int i = 0; i < n; i++){
+        count += (i+1) * hands[i].bid;
+    }   
+    return count;
+}
+
+void modhands(int n, Hand hands[n]){
+    for (int i = 0; i < n; i++) findhand(&hands[i], 1);
+}
+
 
 
 int main() {
@@ -146,34 +172,14 @@ int main() {
     tokenize_input(&tokens, &n, "inputs/day7.txt", "\n");
 
     Hand hands[n];
+    parse(&tokens, n, hands, 0);
 
-    for (int i = 0; i < n; i++){
-        Hand h;
-        char* token;
-        token = strtok(tokens[i], " "); 
-        h.hand = token;
-        token = strtok(NULL, " "); 
-        h.bid = strtol(token, NULL, 10);
-        findhand(&h, 0);
-        hands[i] = h;
-    }
-    long count = 0;
     qsort(hands, n, sizeof(Hand), comparehands);
+    printf("Part 1: %ld\n",  winnings(n, hands));
 
-    for (int i = 0; i < n; i++){
-        count += (i+1) * hands[i].bid;
-    }   
-    printf("Part 1: %ld\n", count);
-
-    count = 0;
-    for (int i = 0; i < n; i++){
-        findhand(&hands[i], 1);
-    }
+    modhands(n, hands);
     qsort(hands, n, sizeof(Hand), comparehands2);
-    for (int i = 0; i < n; i++){
-        count += (i+1) * hands[i].bid;
-    } 
-    printf("Part 2: %ld\n", count);  
+    printf("Part 2: %ld\n", winnings(n, hands));  
 
     free_tokens(tokens, n);
 
