@@ -7,23 +7,10 @@
 #include "tokenization.h"
 #include "utilities.h"
 
-int main() {
-
-    char **tokens;
-    int n;
-
-    tokenize_input(&tokens, &n, "inputs/day9.txt", "\n");
-
-    int sequences[n][64];
-    int sizes[n];
-    memset(sequences, 0, sizeof(sequences));
-    memset(sizes, 0, sizeof(sizes));
-
-    int sequences1[n][64];
-    memset(sequences1, 0, sizeof(sequences1));
+void parse(int n, char*** tokens, int sequences[n][64], int sequences1[n][64], int sizes[n]){
 
     for (int i = 0; i < n; i++){
-        char* token = strtok(tokens[i], " ");
+        char* token = strtok((*tokens)[i], " ");
         int j = 0;
         while (token != NULL){
             int v = strtol(token, NULL, 10);
@@ -35,44 +22,44 @@ int main() {
         sizes[i] = j;
     } 
 
-    for (int i = 0; i < n; i++){
-        int allzeros = 0;
-        int size = sizes[i];
-        while(allzeros == 0 || size > 1){
-            allzeros = 1;
-            for (int j = 0; j < size-1; j++){
-                sequences1[i][j] = sequences1[i][j+1] - sequences1[i][j];
-                if (sequences1[i][j] != 0) allzeros = 0;
-            }
-            size--;
-        }
-    }
-
-    for (int i = 0; i < n; i++){
-    int allzeros = 0;
-    int size = sizes[i];
-    int dist = 0;
-    while(allzeros == 0 || dist < size-1){
-        allzeros = 1;
-        for (int j = size-1; j > dist; j--){
-            sequences[i][j] = sequences[i][j] - sequences[i][j-1];
-            if (sequences[i][j] != 0) allzeros = 0;
-        }
-        dist++;
-    }
 }
 
+void part1(int n, int sequences[n][64], int sizes[n]){
 
     long sum = 0;
 
     for (int i = 0; i < n; i++){
+    int size = sizes[i];
+    for (int k = size; k > 1; k--){
+        for (int j = 0; j < k-1; j++){
+            sequences[i][j] = sequences[i][j+1] - sequences[i][j];
+            }
+        }   
+    }
+
+    for (int i = 0; i < n; i++){
         for (int j = 0; j < sizes[i]; j++){
-            sum += sequences1[i][j];
+            sum += sequences[i][j];
         }
     }
 
+    printf("Part 1: %ld\n", sum);
 
-    long sum2 = 0;
+}
+
+void part2(int n, int sequences[n][64], int sizes[n]){
+
+    long sum = 0;
+
+    for (int i = 0; i < n; i++){
+        int size = sizes[i];
+        for (int k = 0; k < size-1; k++){
+            for (int j = size-1; j > k; j--){
+                sequences[i][j] = sequences[i][j] - sequences[i][j-1];
+            }
+        }
+    }
+
 
     for (int i = 0; i < n; i++){
         int s = 0;
@@ -80,11 +67,27 @@ int main() {
             if (j%2) s -= sequences[i][j];
             else s += sequences[i][j];
         }
-        sum2 += s;
+        sum += s;
     }
 
-    printf("Part 1: %ld\n", sum);
-    printf("Part 2: %ld\n", sum2);
+    printf("Part 2: %ld\n", sum);
+}
+
+
+int main() {
+
+    char **tokens;
+    int n;
+
+    tokenize_input(&tokens, &n, "inputs/day9.txt", "\n");
+    int sequences[n][64];
+    int sequences1[n][64]; // copy for part 2
+    int sizes[n];
+
+    parse(n, &tokens, sequences, sequences1, sizes);
+
+    part1(n, sequences, sizes);
+    part2(n, sequences1, sizes);
 
     free_tokens(tokens, n);
 
