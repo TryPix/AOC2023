@@ -90,4 +90,5 @@ void freelist(linkedlist *q){
         curr = curr->next;
         free(prev);
     }
+    free(q);
 }
